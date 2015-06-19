@@ -1,0 +1,64 @@
+<script>
+function addTPL_MODULE() {
+
+	var frm = document.frmTPL_MODULE;
+	 <!-- BEGIN DYNAMIC BLOCK: javascriptchecking -->
+	if (frm.TPL_PREFIXTPL_MODULE_TPL_FIELDNAME.value == "" || frm.TPL_PREFIXTPL_MODULE_TPL_FIELDNAME.value=="''" || frm.TPL_PREFIXTPL_MODULE_TPL_FIELDNAME.value=="' '") {
+		alert("Specify TPL_MODULE");
+		frm.TPL_PREFIXTPL_MODULE_TPL_FIELDNAME.value="";
+		frm.TPL_PREFIXTPL_MODULE_TPL_FIELDNAME.focus();
+		return false;
+	}
+	 <!-- END DYNAMIC BLOCK: javascriptchecking -->
+	frm.TPL_PREFIXTPL_MODULE_action.value = "SAVE";		
+	return true;
+}
+
+function Cancel(){
+document.location.href="<?=stripslashes($TPL_PREFIXTPL_MODULE->returnUrl)?>";
+}
+
+</script>
+<form name="frmTPL_MODULE" method="post" action="" onSubmit="return addTPL_MODULE();">
+<input type="hidden" name="TPL_PREFIXTPL_MODULE_returnUrl" value="<?=$TPL_PREFIXTPL_MODULE->returnUrl?>">
+<input type="hidden" name="TPL_PREFIXTPL_MODULE_action" value="">
+<input type="hidden" name="TPL_PREFIXTPL_MODULE_departmentId" value="<?=$TPL_PREFIXTPL_MODULE->departmentId?>">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td class="h1"><?php if ($TPL_PREFIXTPL_MODULE->departmentId) { ?> Edit TPL_MODULE
+<?php } else { ?>
+				Add TPL_MODULE
+<?php } ?> </td>
+</tr>
+  <tr>
+	<td valign="top">
+	<!--DETAILS LEFT start-->
+	<!--DETAILS LEFT close--></td>
+  </tr>
+   <tr>
+	<td valign="top">
+	<?=displayMessage();?></td>
+  </tr>
+  
+  <tr>
+	<td align="center"><table width="95%" border="0" align="center" cellpadding="2" cellspacing="0">
+<tr>
+     <td  align="left" colspan="2">&nbsp;</td>
+  </tr>
+<tr>
+    <td width="20%" class="required">TPL_MODULE Name&nbsp;</td>
+    <td width="80%" align="left"><input name="TPL_PREFIXTPL_MODULE_TPL_FIELDNAME" type="text" id="TPL_PREFIXTPL_MODULE_TPL_FIELDNAME" maxlength="70"   size="40" value="<?=stripslashes($TPL_PREFIXTPL_MODULE->TPL_FIELDNAME)?>"></td>
+  </tr>
+  <tr>
+    <td align="right" class="content">&nbsp;</td>
+    <td align="left"><input type="submit" name="Submit" value="Submit">
+        <input type="reset" name="btnReset" value="Reset">
+        <input type="button" name="btnCancel" value="Cancel" onclick="Cancel();"></td>
+  </tr>
+    </table></td>
+	</tr>
+</table>
+</form>
+<script>
+document.frmTPL_MODULE.TPL_PREFIXTPL_MODULE_TPL_FIELDNAME.focus();
+</script>

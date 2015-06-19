@@ -1,0 +1,242 @@
+<script language="javascript">
+function addTPL_MODULE() {
+	document.location.href= "TPL_SPPREFTPL_MODULE.php?returnUrl=<?=urlencode(getCurrentPageURL())?>";	
+}
+
+function performAction(action) {
+	
+	var frm				= document.TPL_FRMLIST;
+	var checkFlag		= 0;
+	var selectedValue	= "";		
+	if(frm.elements["TPL_PRIMARYKEY[]"]!=null){
+			
+		selectedValue		= getCheckedItem(frm,"TPL_PRIMARYKEY[]");
+		
+		if (frm.elements["TPL_PRIMARYKEY[]"].checked == true) {		
+			checkFlag = 1;
+		}
+	
+		for(var i=0;i<frm.elements["TPL_PRIMARYKEY[]"].length;i++) {
+			if (frm.elements["TPL_PRIMARYKEY[]"][i].checked) {	
+				checkFlag++;		
+			} 	
+		} 	
+	}
+
+	if (checkFlag == 0) {
+		if (action == "DELETE") {
+			alert("Please select atleast one TPL_MODULE");
+		}
+		else {
+			alert("Please select one TPL_MODULE");
+		}
+		return false;
+	} 
+	else { 
+		if (action == "DELETE") {
+			if(confirm("You are about to  "+action.toLowerCase()+"  the selected TPL_MODULE(s). Do you wish to continue?")) {
+				frm.TPL_PREFIXTPL_MODULE_TPL_PRIMARYKEYs.value	= selectedValue;
+				frm.TPL_PREFIXTPL_MODULE_action.value		= action;
+				frm.action							= "TPL_SPPREFTPL_MODULEList.php?returnUrl=<?=urlencode(getCurrentPageURL())?>";
+				frm.submit();			
+			}
+		}
+		else if (action == "EDIT") {
+				
+			if (checkFlag > 1) {
+				alert("Please select only one item to "+action.toLowerCase()+"");
+				return false;
+			} 
+			else {
+				frm.TPL_PREFIXTPL_MODULE_TPL_PRIMARYKEY.value	= selectedValue;
+				frm.TPL_PREFIXTPL_MODULE_action.value		= action;
+				frm.action							= "TPL_SPPREFTPL_MODULE.php?returnUrl=<?=urlencode(getCurrentPageURL())?>";
+				frm.submit();			
+			}
+		}			
+	}
+}
+
+function submitPage() {
+		
+	var frm 		= document.TPL_FRMLIST;
+	var	pageSize	= frm.TPL_PREFIXTPL_MODULE_pageSize.value;
+
+	frm.action		= "TPL_SPPREFTPL_MODULEList.php"
+						<!-- BEGIN DYNAMIC BLOCK: sumbitpageaction -->
+						+"TPL_SEPERATORTPL_FEILDS=<?=$TPL_PREFIXTPL_MODULE->TPL_FEILDS?>"
+						<!-- END DYNAMIC BLOCK: sumbitpageaction -->
+						+"&sortDirection=<?=$TPL_PREFIXTPL_MODULE->sortDirection?>&submitted=<?=$TPL_PREFIXTPL_MODULE->submitted?>&sortColumn=<?=$TPL_PREFIXTPL_MODULE->sortColumn?>&pageSize="+pageSize;
+	frm.submit();
+}
+
+function submitSearch() {
+
+	var frm	= document.TPL_FRMSEARCH;	
+	<!-- BEGIN DYNAMIC BLOCK: sumbitsearchactionvalueassigning -->
+	var TPL_FEILDS						= frm.TPL_PREFIXTPL_MODULE_TPL_FEILDS.value;
+	<!-- END DYNAMIC BLOCK: sumbitsearchactionvalueassigning -->
+	frm.TPL_PREFIXTPL_MODULE_submitted.value		= 1;
+	
+	frm.action								= ""+
+											<!-- BEGIN DYNAMIC BLOCK: sumbitsearchaction -->
+											+"TPL_SEPERATORTPL_FEILDS="+TPL_FEILDS+""
+											<!-- END DYNAMIC BLOCK: sumbitsearchaction -->
+											+"&pageSize=<?=$TPL_PREFIXTPL_MODULE->pageSize?>&sortDirection=<?=$TPL_PREFIXTPL_MODULE->sortDirection?>&submitted=1&sortColumn=<?=$TPL_PREFIXTPL_MODULE->sortColumn?>";
+	frm.submit();	
+}
+
+function clearSearch(){
+
+	var frm	= document.TPL_FRMSEARCH;	
+	<!-- BEGIN DYNAMIC BLOCK: clearsearch -->
+	frm.TPL_PREFIXTPL_MODULE_TPL_FEILDS.value= "";
+	<!-- END DYNAMIC BLOCK: clearsearch -->
+}
+
+
+</script>
+  <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF"> 
+  <tr> 
+     <td> <table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+         <tr> 
+          <td class="h1">Search TPL_MODULE </td> 
+        </tr> 
+         <tr> 
+          <td valign="top" height="30"><?=displayMessage()?> 
+&nbsp;</td> 
+        </tr> 
+         <form name="TPL_FRMSEARCH" method="post" action="" onsubmit="return submitSearch();"> 
+          <input type="hidden"  name="TPL_PREFIXTPL_MODULE_submitted" value=""> 
+          <tr> 
+             <td align="left"> <table width="97%" border="0" align="center" cellpadding="0" cellspacing="0" class="contentBG"> 
+                 <tr> 
+                  <td class="content" width="1%">&nbsp;</td> 
+                  <td colspan="3" class="content">&nbsp;</td> 
+                </tr> 
+               <!-- BEGIN DYNAMIC BLOCK: inputfields --> 
+				 <tr> 
+                  <td class="content" width="1%">&nbsp;</td> 
+                  <td width="17%" class="content">TPL_FIELD_NAME</td> 
+                  <td width="83%" colspan="2">TPL_FIELD_INPUT</td> 
+                </tr> 
+				  <!-- END DYNAMIC BLOCK: inputfields --> 
+                 <tr> 
+                  <td class="content" width="1%">&nbsp;</td> 
+                  <td rowspan="2" valign="top" class="content">&nbsp;</td> 
+                  <td colspan="2" height="40"><input type="submit" name="Submit" value="Search"  tabindex="1"> 
+                     <input type="button" name="btnReset" value="Reset" onclick="clearSearch()"> 
+                     <input type="button" name="btnCancel" value="Cancel" onclick="document.location.href='TPL_SPPREFWelcome.php';"></td> 
+                </tr> 
+               </table></td> 
+           </tr> 
+        </form> 
+         <tr> 
+          <td align="left">&nbsp;</td> 
+        </tr> 
+         <form name="TPL_FRMLIST" method="post" action=""> 
+          <input type="hidden"  name="TPL_PREFIXTPL_MODULE_pageIndex" value="<?=$TPL_PREFIXTPL_MODULE->pageIndex?>"> 
+          <input type="hidden"  name="TPL_PREFIXTPL_MODULE_sortColumn" value="<?=$TPL_PREFIXTPL_MODULE->sortColumn?>"> 
+          <input type="hidden"  name="TPL_PREFIXTPL_MODULE_sortDirection" value="<?=$TPL_PREFIXTPL_MODULE->sortDirection?>"> 
+          <input type="hidden"  name="TPL_PREFIXTPL_MODULE_action" value=""> 
+          <input type="hidden"  name="TPL_PREFIXTPL_MODULE_TPL_PRIMARYKEYs" value=""> 
+          <input type="hidden" name="TPL_PREFIXTPL_MODULE_TPL_PRIMARYKEY" value=""> 
+           <input type="hidden" name="TPL_PREFIXTPL_MODULE_returnUrl" value=""> 
+          <tr> 
+             <td align="center"><table width="97%" border="0" cellpadding="0" cellspacing="0"> 
+                 <tr> 
+                  <td colspan="3" class="h2">List of TPL_MODULEs</td> 
+                </tr> 
+                 <tr> 
+                  <td width="48%" height="35" class="content">Show&nbsp; 
+                     <select name="TPL_PREFIXTPL_MODULE_pageSize" <?   echo $frmControlStatus?> > 
+                      <?=$pageRange?> 
+                    </select> 
+                     Records Per Page
+                     <input type="button" name="btnGo" value="Go" onClick="submitPage();" <?   echo $frmControlStatus?>  > </td> 
+                  <td width="29%" height="35" align="right" class="content">&nbsp;</td> 
+                  <td width="23%" height="35" align="right" class="content"><?
+			if($TPL_PREFIXTPL_MODULE->submitted==1){
+				echo $TPL_PREFIXTPL_MODULE->TPL_PREFIXPaginate->writePageStatus(count($arrTPL_MODULE));
+			}	
+			?></td> 
+                </tr> 
+                 <tr> 
+                  <td height="35" class="content">With Selected
+                     <input type="button" name="btnEdit" value="Edit" onclick="performAction('EDIT');" <?   echo $frmControlStatus?>  > 
+                     <input type="button" name="btnDelete" value="Delete" onclick="performAction('DELETE');" <?   echo $frmControlStatus?>  ></td> 
+                  <td height="35" colspan="2" align="right"><input type="button" name="btnAdd" value="Add TPL_MODULE" onClick="addTPL_MODULE()"></td> 
+                </tr> 
+               </table></td> 
+           </tr> 
+          <tr> 
+             <td align="center"> <table width="97%" border="0" cellpadding="3" cellspacing="0" class="contentBG"> 
+                 <tr> 
+                  <td width="3%" align="left" class="h3"><input type="checkbox" name="chkAll" value="checkbox" <?   echo $frmControlStatus?>    onClick="selectAll(TPL_PRIMARYKEY, this);"></td> 
+                  <td width="3%" align="left" class="h3">#</td>
+				   	<!-- BEGIN DYNAMIC BLOCK: fieldnameparsing -->
+                  <td  align="left" class="h3"> <a href="javascript:sortColumn('TPL_FEILDS', 'TPL_PREFIXTPL_MODULE', 'TPL_FRMLIST', '<?=$extraParameters?>');" onClick="this.href" >TPL_FEILDNAME</a> 
+                     <?=$TPL_PREFIXTPL_MODULE->sortImage("TPL_FEILDS", $TPL_PREFIXTPL_MODULE->sortColumn, $TPL_PREFIXTPL_MODULE->sortDirection, $includePath)?> </td> 
+					 <!-- END DYNAMIC BLOCK: fieldnameparsing -->
+                </tr> 
+                 <? 
+		if($TPL_PREFIXTPL_MODULE->submitted==1){
+			$recordNumber	= $TPL_PREFIXTPL_MODULE->TPL_PREFIXPaginate->recordNumberOffset;
+			foreach ($arrTPL_MODULE as $row) { ?> 
+			    <tr onMouseOver="mouseOverEffect(<?=$row["TPL_PRIMARYKEY"]?>);changeCheckedColor(TPL_FRMLIST.TPL_PRIMARYKEY); return true;" onMouseOut="mouseOutEffect(<?=$row["TPL_PRIMARYKEY"]?>);changeCheckedColor(TPL_FRMLIST.TPL_PRIMARYKEY); return true;" id = "row_<?=$row["TPL_PRIMARYKEY"]?>">
+                  <td align="left" valign="top" class="rowcontent"><input type="checkbox" name="TPL_PRIMARYKEY[]" value="<?=$row["TPL_PRIMARYKEY"]?>" id="TPL_PRIMARYKEY" onCLick='resetChkBox(TPL_PRIMARYKEY, chkAll);changeCheckedColor(TPL_FRMLIST.TPL_PRIMARYKEY);' /></td> 
+                  <td align="left" valign="top" class="rowcontent" onClick="checkRow(<?=$row["TPL_PRIMARYKEY"]?>,TPL_FRMLIST.TPL_PRIMARYKEY);"><?=$recordNumber?></td> 
+                 	<!-- BEGIN DYNAMIC BLOCK: fieldvalueparsing -->
+				  	<td align="left" valign="top" class="rowcontent" onClick="checkRow(<?=$row["TPL_PRIMARYKEY"]?>,TPL_FRMLIST.TPL_PRIMARYKEY);"><? echo $row["TPL_FIELDS"]?> </td> 
+					<!-- END DYNAMIC BLOCK: fieldvalueparsing -->
+                </tr> 
+                 <? $recordNumber++;
+		  	} 
+		
+		?> 
+                 <? if(count($arrTPL_MODULE)==0){ ?> 
+                <tr> 
+                  <td colspan="TPL_COLSPAN" align="center" height="50" class="content">No TPL_MODULE(s) Found!</td> 
+                </tr> 
+                 <?
+			   }
+		}else {
+		?>
+                <tr> 
+                  <td colspan="TPL_COLSPAN" align="center" height="50" class="content">Please select the necessary fields for search.</td> 
+                </tr> 
+		<?
+		}
+		?> 
+               </table></td> 
+           </tr> 
+          <tr> 
+             <td align="center"> <table width="97%" border="0" cellpadding="0" cellspacing="0"> 
+                 <tr> 
+                  <td width="48%" height="30" class="content">With Selected
+                     <input type="button" name="btnEdit1" value="Edit" onclick="performAction('EDIT');" <?   echo $frmControlStatus?>  > 
+                     <input type="button" name="btnDelete1" value="Delete" onclick="performAction('DELETE');" <?   echo $frmControlStatus?>  ></td> 
+                  <td width="52%" height="30" align="right"><input type="button" name="btnAdd1" value="Add TPL_MODULE" onClick="addTPL_MODULE()"></td> 
+                </tr>
+                 <tr>
+                   <td height="30" class="content">&nbsp;</td>
+                   <td height="30" align="right"><span class="content">
+                     <?
+			if($TPL_PREFIXTPL_MODULE->submitted==1){
+				echo $TPL_PREFIXTPL_MODULE->TPL_PREFIXPaginate->writeHTMLPageRanges("TPL_PREFIXTPL_MODULE", "TPL_FRMLIST", $extraParameters);
+			}
+			?>
+                   </span></td>
+                 </tr> 
+               </table></td> 
+           </tr> 
+        </form> 
+         <tr> 
+          <td align="center">&nbsp;</td> 
+        </tr> 
+       </table></td> 
+   </tr> 
+</table> 
+<script>
+document.TPL_FRMSEARCH.Submit.focus();
+</script> 

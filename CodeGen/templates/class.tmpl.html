@@ -1,0 +1,203 @@
+<?php 
+class TPL_PREFIXTPL_MODULE extends TPL_PREFIXBase  { 
+
+   <!-- BEGIN DYNAMIC BLOCK: declarevariables -->
+	var $TPL_DECLAREVARIABLE;		
+		<!-- END DYNAMIC BLOCK: declarevariables -->
+	var $TPL_IDS;
+
+	function TPL_PREFIXTPL_MODULE($connect, $includePath) {			
+		
+		$this->TPL_PREFIXBase($connect, $includePath, "TPL_PREFIXTPL_MODULE");			
+		
+		 <!-- BEGIN DYNAMIC BLOCK: assignvariables -->
+		$this->TPL_ASSIGNVARIABLE	= "";		
+		<!-- END DYNAMIC BLOCK: assignvariables -->
+		$this->TPL_IDS				= "";
+		$this->includePath			= $includePath;
+		$this->sortColumn			= "TPL_PRIMARYKEY";
+		$this->pageSize				= constant('TPL_PPREFDEFAULTPAGESIZE');
+		$this->rangeVal				= constant("TPL_PPREFRANGEVAL");
+	}
+
+	function setPostVars() {	
+
+		parent::setPostVars();	
+		 <!-- BEGIN DYNAMIC BLOCK: postvarsvariables -->
+		if (isset($_POST['TPL_PREFIXTPL_MODULE_TPL_POSTVARS']))			$this->TPL_POSTVARS				= trim($_POST['TPL_PREFIXTPL_MODULE_TPL_POSTVARS']);
+		 <!-- END DYNAMIC BLOCK: postvarsvariables -->
+		
+		if (isset($_POST['TPL_PREFIXTPL_MODULE_TPL_IDS']))				$this->TPL_IDS					= trim($_POST['TPL_PREFIXTPL_MODULE_TPL_IDS']);			
+	}
+
+	function setGetVars() {
+
+		parent::setGetVars();	
+
+		 <!-- BEGIN DYNAMIC BLOCK: getvarsvariables -->
+		if (isset($_GET['TPL_GETVARS']))			$this->TPL_GETVARS								= trim($_GET['TPL_GETVARS']);
+		 <!-- END DYNAMIC BLOCK: getvarsvariables -->
+		 
+		 	if (isset($_GET['TPL_IDS']))				$this->TPL_IDS								= trim($_GET['TPL_IDS']);			
+	}
+	
+	function saveTPL_MODULE($TPL_PRIMARYKEY) { 
+
+		if (!$this->validateTPL_MODULE()) return 0;	
+
+		if (trim($TPL_PRIMARYKEY) ==  "") {
+
+			$query	= " INSERT INTO   
+							TPL_TABLENAME 
+							(
+							 <!-- BEGIN DYNAMIC BLOCK: parseinsertfeilds -->
+							TPL_FEILDSTPL_SEPERATOR
+							 <!-- END DYNAMIC BLOCK: parseinsertfeilds -->
+							) 
+						VALUES 
+							(
+							 <!-- BEGIN DYNAMIC BLOCK: parsefeilds -->
+							\"$this->TPL_FEILDS\"TPL_SEPERATOR
+							<!-- END DYNAMIC BLOCK: parsefeilds -->
+							)";
+
+			$dbQry	= new dbQuery($query, $this->connect->connId);
+			$this->TPL_PRIMARYKEY		= $dbQry->lastInsertId();
+			$_SESSION["MESSAGE"]	= "TPL_MODULE added successfully";	
+
+		} 
+		else {
+
+			$query	= "	UPDATE 
+							TPL_TABLENAME 
+						SET 
+								 <!-- BEGIN DYNAMIC BLOCK: parseupdatefeilds -->
+							TPL_FEILDS = \"$this->TPL_FEILDS\"TPL_SEPERATOR
+								 <!-- END DYNAMIC BLOCK: parseupdatefeilds -->
+						WHERE 
+							TPL_PRIMARYKEY   = $TPL_PRIMARYKEY";
+
+			$dbQry	= new dbQuery($query, $this->connect->connId);
+			$this->TPL_PRIMARYKEY		= $TPL_PRIMARYKEY;
+			$_SESSION["MESSAGE"]	= "TPL_MODULE updated successfully";	
+		}
+		return $this->TPL_PRIMARYKEY;
+	}
+
+	function validateTPL_MODULE() {	
+			$_SESSION["TPL_PPREFMESSAGE"] 	= "";	
+	 <!-- BEGIN DYNAMIC BLOCK: validatefeilds -->
+		if (trim($this->TPL_FEILDS) == "") {
+			$_SESSION["TPL_PPREFMESSAGE"] .= "TPL_FIELD_NAME cannot be null <BR>";
+		}
+		<!-- END DYNAMIC BLOCK: validatefeilds -->
+	if (strlen($_SESSION["TPL_PPREFMESSAGE"]) > 0) {
+			return 0;
+		} else {
+			return 1;
+		}						
+	}
+
+	function retrieveTPL_MODULE($TPL_PRIMARYKEY) {
+
+		if (trim($TPL_PRIMARYKEY) == "") return 0;
+
+		$query	= " SELECT 
+						* 
+					FROM 
+						TPL_TABLENAME 
+					WHERE 
+						TPL_PRIMARYKEY = $TPL_PRIMARYKEY";	
+		$dbQry	= new dbQuery($query, $this->connect->connId);	
+		$this->retrieveTPL_MODULERow($dbQry);
+		return $dbQry->numRows();
+	}
+
+	function retrieveTPL_MODULERow($dbQry) {
+
+		if(!$dbQry->numRows()) return 0;
+
+		$row						= $dbQry->getArray();
+		<!-- BEGIN DYNAMIC BLOCK: retrieverowfeilds -->
+		$this->TPL_FEILDS			= $row["TPL_FEILDS"];
+		<!-- END DYNAMIC BLOCK: retrieverowfeilds -->
+			
+
+		return 1;
+
+	}
+
+	function retrieveTPL_MODULEArray() { 	
+		
+		$query	= " SELECT	
+						*  
+					FROM	
+						TPL_TABLENAME WHERE 1=1 ";	
+						
+	
+	<!-- BEGIN DYNAMIC BLOCK: retrievearraynumfeilds -->
+		if(trim($this->TPL_RETNUMFEILDS) != "") 
+			$query	.=	" AND TPL_RETNUMFEILDS	=	".$this->TPL_RETNUMFEILDS;		
+			<!-- END DYNAMIC BLOCK: retrievearraynumfeilds -->
+		<!-- BEGIN DYNAMIC BLOCK: retrievearraystringfeilds -->
+		if (trim($this->TPL_RETSTRINGFEILDS) != "") 
+			$query	.= " AND TPL_RETSTRINGFEILDS LIKE '%".$this->TPL_RETSTRINGFEILDS."%'";
+		<!-- END DYNAMIC BLOCK: retrievearraystringfeilds -->	
+			if (trim($this->TPL_IDS) != "") 
+			$query	.= " AND TPL_PRIMARYKEY IN($this->TPL_IDS)";
+		$query	.= " ORDER BY $this->sortColumn $this->sortDirection";
+		
+		$this->TPL_PREFIXPaginate = new TPL_PREFIXPaginate($this->connect->connId, $query, $this->pageSize, $this->rangeVal, $this->pageIndex, $this->includePath, 0);	
+		
+		return $this->retrieveTPL_MODULERowArray($this->TPL_PREFIXPaginate);
+	}
+
+	function retrieveTPL_MODULERowArray($dbQry) {
+	
+		$arrTPL_MODULE	= array();
+		while($row		= $dbQry->getArray()) {
+			$arrTPL_MODULE[$row["TPL_PRIMARYKEY"]]	= array(
+															<!-- BEGIN DYNAMIC BLOCK: retrievearrayparsing -->
+															"TPL_FEILDS"			=> $row["TPL_FEILDS"]TPL_SEPERATOR
+															<!-- END DYNAMIC BLOCK: retrievearrayparsing -->														
+															);
+		}			
+		return $arrTPL_MODULE;
+	}
+
+
+	function deleteTPL_MODULE($TPL_IDS) {
+
+		if (trim($TPL_IDS) == "") return 0;
+		
+		$query	= " DELETE FROM 
+						TPL_TABLENAME 
+					WHERE 
+						TPL_PRIMARYKEY IN ($TPL_IDS)";
+		$dbQry	= new dbQuery($query, $this->connect->connId);
+		$_SESSION["MESSAGE"]	.= "TPL_MODULE(s) deleted successfully";
+
+		return 1;			
+	}
+			
+	function postTPL_MODULE() {	
+
+		$this->setPostVars();
+		$this->setGetVars();	
+
+		if ($this->action == "SAVE") {		
+			if ($this->saveTPL_MODULE($this->TPL_PRIMARYKEY)) {
+				header("location:".$this->includePath.stripslashes($this->returnUrl));
+				exit();					
+			}
+		}
+		else if ($this->action == "DELETE") {				
+			$this->deleteTPL_MODULE($this->TPL_IDS);
+			header("location:".$this->includePath.stripslashes($this->returnUrl));
+			exit();		
+		}
+		
+		return $this->retrieveTPL_MODULE($this->TPL_PRIMARYKEY);
+	}
+}
+?>

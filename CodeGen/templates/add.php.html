@@ -1,0 +1,51 @@
+<?
+ob_start();
+header("Cache-Control: no-store, no-cache");
+
+set_time_limit (60);
+
+$includePath		= "./";
+
+include_once($includePath."TPL_PRPREFIXCommon.php");
+include_once($includePath."classes/TPL_PRPREFIXTPL_MODULE.cls.php");
+
+$TPL_PREFIXTPL_MODULE	= new TPL_PREFIXTPL_MODULE($connect, $includePath);
+$TPL_PREFIXTPL_MODULE->setPostVars();
+
+$pageTitle			= (($TPL_PREFIXTPL_MODULE->TPL_PRIMARYKEY == "")?"Add":"Edit")." a TPL_MODULE in ".getProductName();	
+$metaDescription	= "";
+$metaKeywords		= "";
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title><?=getTitle()?></title>
+<meta name="title" content="<?=getTitle()?>">
+<meta name="description" content="<?=getMetaDescription()?>">
+<meta name="keywords" content="<?=getMetaKeywords()?>">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<link href="<?=$includePath?>css/style.css" rel="stylesheet" type="text/css">
+<link rel="SHORTCUT ICON" href="<?=$includePath?>images/logo.ico">
+</head>
+<body>
+<? 
+include_once($includePath."includes/TPL_PRPREFIXCommonBody.inc.php"); 
+?>
+</body>
+</html>
+<?
+function writeMain($connect, $includePath) {
+
+	global $TPL_PREFIXTPL_MODULE;
+	
+	$TPL_PREFIXTPL_MODULE->postTPL_MODULE();
+	if ($TPL_PREFIXTPL_MODULE->returnUrl == "") {
+		$TPL_PREFIXTPL_MODULE->returnUrl = "TPL_PRPREFIXTPL_MODULEList.php";
+	} 
+	$TPL_PREFIXTPL_MODULE->returnUrl	 = $TPL_PREFIXTPL_MODULE->returnUrl;
+	include_once($includePath."templates/TPL_PRPREFIXTPL_MODULE.tmpl.php");
+}
+
+ob_end_flush(); 
+?>

@@ -1,0 +1,66 @@
+<?
+ob_start();
+header("Cache-Control: no-store, no-cache");
+
+set_time_limit (60);
+
+$includePath		= "./";
+
+include_once($includePath."lcCommon.php");
+include_once($includePath."classes/lcPaginate.cls.php");
+include_once($includePath."classes/lcTPL_MODULE.cls.php");
+
+
+$pageTitle			= "List of TPL_MODULEs in ".getProductName();
+$metaDescription	= "";
+$metaKeywords		= "";
+
+
+?>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title><?=getTitle()?></title>
+<meta name="title" content="<?=getTitle()?>">
+<meta name="description" content="<?=getMetaDescription()?>">
+<meta name="keywords" content="<?=getMetaKeywords()?>">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<link href="<?=$includePath?>css/style.css" rel="stylesheet" type="text/css">
+<link rel="SHORTCUT ICON" href="<?=$includePath?>images/logo.ico">
+</head>
+<body>
+<? 
+include_once($includePath."includes/lcCommonBody.inc.php"); 
+?>
+</body>
+</html>
+<?
+function writeMain($connect, $includePath) {
+
+	global $arrPageRange;
+	$TPL_PREFIXTPL_MODULE	= new TPL_PREFIXTPL_MODULE($connect, $includePath);
+	$TPL_PREFIXTPL_MODULE->sortDirection = "ASC";
+	$TPL_PREFIXTPL_MODULE->postTPL_MODULE();
+	$pageRange			= HTMLOptionKeyValArray($arrPageRange,$TPL_PREFIXTPL_MODULE->pageSize);
+	$arrTPL_MODULE		= array();
+	
+	if($TPL_PREFIXTPL_MODULE->submitted==1){
+		$arrTPL_MODULE		= $TPL_PREFIXTPL_MODULE->retrieveTPL_MODULEArray();
+	}
+	$frmControlStatus 	= "";
+	if (count($arrTPL_MODULE) == 0 ) {
+		$frmControlStatus = "disabled";		
+	}
+	$extraParameters	= "";
+	
+	<!-- BEGIN DYNAMIC BLOCK: extrafields -->
+	$extraParameters	.="TPL_FIELDS=$TPL_PREFIXTPL_MODULE->TPL_FIELDS&";
+	<!-- END DYNAMIC BLOCK: extrafields -->	
+	$extraParameters	.= "pageSize=$TPL_PREFIXTPL_MODULE->pageSize&submitted=$TPL_PREFIXTPL_MODULE->submitted";
+	
+	include_once($includePath."templates/lcTPL_MODULEList.tmpl.php");
+}
+
+ob_end_flush(); 
+?>

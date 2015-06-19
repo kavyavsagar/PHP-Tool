@@ -1,0 +1,147 @@
+<?
+if (file_exists("index.html")) {	// This is set for redirecting to the login page if the index.html file is there in the root.
+									// index.html is the maintanence notification file
+	header("location: index.html");
+	exit;
+}
+
+//error_reporting(E_ALL ^ E_USER_NOTICE);
+
+include_once($includePath."TPL_SPPREFConstants.php");
+include_once($includePath."TPL_SPPREFFunctions.php");
+include_once($includePath."classes/TPL_SPPREFConnect.cls.php");
+include_once($includePath."classes/TPL_SPPREFBase.cls.php");
+include_once($includePath."classes/TPL_SPPREFLogin.cls.php");
+include_once($includePath."classes/TPL_SPPREFSetting.cls.php");
+
+$debugString = "";
+$className	 = "";
+
+$connect		= new dbConnect();
+
+
+//$date		= split(' ', $clsTPL_SPPREFBase->today);
+$today		= split(':', $date[1]);
+$arrDay		= split('-', $date[0]); 
+			   
+$hr			= $today[0] ;
+$min		= $today[1] ;
+$sec		= $today[2] ;
+
+$day		= $arrDay[2];
+$month		= $arrDay[1];
+$year		= $arrDay[0];
+
+$indianTime = date("H:i", mktime($hr, $min, $sec, $month, $day, $year));	
+
+$arrPageRange		= 	array(	
+								5	=>	5,
+								25	=> 25,
+					  			50	=> 50,
+								100	=> 100,
+								200	=> 200,
+								500	=> 500								
+							 );
+							 
+
+$arrSalutation		= 	array(	"Mr"	=> "Mr.",
+								"Miss"	=> "Miss.",
+								"Mrs."	=> "Mrs."			
+							 );						 
+
+
+$arrGender			= 	array(	"M"	=> "Male",
+								"F"	=> "Female"
+							  );
+
+
+$arrMaritialStatus	= 	array(	"M"	=> "Married",
+								"S"	=> "Single"
+							  );
+
+$arrMM_TO_MMM		= 	array(	"01"	=> "Jan",
+								"02"	=> "Feb",
+								"03"	=> "Mar",
+								"04"	=> "Apr",
+								"05"	=> "May",
+								"06"	=> "Jun",
+								"07"	=> "Jul",
+								"08"	=> "Aug",						
+								"09"	=> "Sep",
+								"10"	=> "Oct",
+								"11"	=> "Nov",
+								"12"	=> "Dec"
+								);	
+								
+
+$arrTime			= 	array(	"00:30:00"	=> "00:30",
+								"01:00:00"	=> "01:00",
+								"01:30:00"	=> "01:30",	
+								"02:00:00"	=> "02:00",	
+								"02:30:00"	=> "02:30",	
+								"03:00:00"	=> "03:00",	
+								"03:30:00"	=> "03:30",	
+								"04:00:00"	=> "04:00",	
+								"04:30:00"	=> "04:30",	
+								"05:30:00"	=> "05:00",	
+								"05:30:00"	=> "05:30",	
+								"06:00:00"	=> "06:00",	
+								"06:30:00"	=> "06:30",	
+								"07:00:00"	=> "07:00",	
+								"07:30:00"	=> "07:30",	
+								"08:00:00"	=> "08:00",	
+								"08:30:00"	=> "08:30",	
+								"09:00:00"	=> "09:00",	
+								"09:30:00"	=> "09:30",	
+								"10:00:00"	=> "10:00",	
+								"10:30:00"	=> "10:30",	
+								"11:00:00"	=> "11:00",		
+								"11:30:00"	=> "11:30",
+								"12:00:00"	=> "12:00",
+								"12:30:00"	=> "12:30",
+								"13:00:00"	=> "13:00",
+								"13:30:00"	=> "13:30",
+								"14:00:00"	=> "14:00",
+								"14:30:00"	=> "14:30",
+								"15:00:00"	=> "15:00",
+								"15:30:00"	=> "15:30",
+								"16:30:00"	=> "16:00",
+								"16:30:00"	=> "16:30",
+								"17:00:00"	=> "17:00",
+								"17:30:00"	=> "17:30",
+								"18:00:00"	=> "18:00",
+								"18:30:00"	=> "18:30",		
+								"19:00:00"	=> "19:00",	
+								"19:30:00"	=> "19:30",	
+								"20:00:00"	=> "20:00",	
+								"20:30:00"	=> "20:30",
+								"21:00:00"	=> "21:00",	
+								"21:30:00"	=> "21:30",	
+								"22:00:00"	=> "22:00",	
+								"22:30:00"	=> "22:30",	
+								"23:00:00"	=> "23:00",	
+								"23:30:00"	=> "23:30",	
+								"24:00:00"	=> "24:00"	
+							 );				
+*/
+
+for($i = 2000; $i<= date("Y")+20; $i++) {
+	$yearArray[] = str_pad($i, 2 , "0", STR_PAD_LEFT);
+}	
+
+for($i=1; $i<=31; $i++) {
+	$dayArray[] = str_pad($i, 2 , "0", STR_PAD_LEFT);
+}
+
+for($i=0; $i<=23; $i++) {
+	$hourArray[] = str_pad($i, 2 , "0", STR_PAD_LEFT);
+}
+
+for($i=0; $i<=59; $i++) {
+	$minuteArray[] = str_pad($i, 2 , "0", STR_PAD_LEFT);
+}
+
+
+
+							 
+?>

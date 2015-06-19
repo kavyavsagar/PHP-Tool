@@ -1,0 +1,121 @@
+<?
+class clsTPL_SPPREFBase {
+
+	var $connect;	
+	var $includePath;
+	var $implementClassName;	
+
+	var $returnUrl;
+
+	var $pageIndex;
+	var $pageSize;
+	var $sortColumn;
+	var $sortDirection; 
+	var $sortImage;
+	var $parentId;
+
+	var $action;
+	
+	var $submitted;
+	
+	var $userIP;
+
+	var $today;
+	
+	var $debug;
+	
+	
+
+	function clsTPL_SPPREFBase($connect, $includePath, $implementClassName) {
+		
+		$this->connect				= $connect;
+		$this->includePath			= $includePath;
+		$this->implementClassName	= $implementClassName;		
+
+		$this->returnUrl			= "";
+				
+		$this->sortColumn			= "";	
+		$this->sortDirection		= "DESC";
+		$this->sortImage			= " <img src='".$this->includePath."images/sortasc.gif'>";
+		$this->debug				= "";
+
+// Its again called from TPL_SPPREFbase b'se we are using it in alomost all classes.10-11-2006-Dileep.
+// commented functions taken out from the constructor of TPL_SPPREFBase.cls.php, since its executed in every object creation.
+
+		$this->userIP				= $this->getIp();	
+		
+// 		To get the offset for different branches for showing clock		
+		$this->retrieveTimeOffset();
+		
+// 		To get the settings values for use in attendance and workstatus caTPL_SPPREFulation.
+		$this->retrieveAttendanceAllowedDays();
+
+	}
+	
+	function setPostVars() {
+
+		if (isset($_POST[$this->implementClassName."_returnUrl"]))		$this->returnUrl		= stripslashes($_POST[$this->implementClassName."_returnUrl"]);
+		if (isset($_POST[$this->implementClassName."_pageIndex"]))		$this->pageIndex		= $_POST[$this->implementClassName."_pageIndex"];
+		if (isset($_POST[$this->implementClassName."_pageSize"]))		$this->pageSize			= $_POST[$this->implementClassName."_pageSize"];
+		if (isset($_POST[$this->implementClassName."_sortColumn"]))		$this->sortColumn		= $_POST[$this->implementClassName."_sortColumn"];
+		if (isset($_POST[$this->implementClassName."_sortDirection"]))	$this->sortDirection	= $_POST[$this->implementClassName."_sortDirection"];
+		if (isset($_POST[$this->implementClassName."_action"]))			$this->action			= $_POST[$this->implementClassName."_action"];
+		if (isset($_POST[$this->implementClassName."_submitted"]))		$this->submitted		= $_POST[$this->implementClassName."_submitted"];
+		if ($this->sortDirection == "DESC") 							  
+			$this->sortImage	= " <img src='".$this->includePath."images/sortdesc.gif'>";
+	}
+
+	function setGetVars() {		
+
+		if (isset($_GET["returnUrl"]))		$this->returnUrl		= stripslashes($_GET["returnUrl"]);
+		if (isset($_GET["submitted"]))		$this->submitted		= $_GET["submitted"];
+		if (isset($_GET["pageIndex"]))		$this->pageIndex		= $_GET["pageIndex"];
+		if (isset($_GET["pageSize"]))		$this->pageSize			= $_GET["pageSize"];
+		if (isset($_GET["parentId"]))		$this->parentId			= $_GET["parentId"];
+		if (isset($_GET["sortColumn"]))		$this->sortColumn		= $_GET["sortColumn"];
+		if (isset($_GET["sortDirection"]))	$this->sortDirection	= $_GET["sortDirection"];
+		
+		if ($this->sortDirection == "DESC") 							  
+			$this->sortImage	= " <img src='".$this->includePath."images/sortdesc.gif'>";
+		else
+			$this->sortImage	= " <img src='".$this->includePath."images/sortasc.gif'>";
+			
+		if (isset($_GET["debug"]))			$this->debug			= $_GET["debug"];		
+		
+		//203.200.143.20 - kochi ip
+		//if($this->getIp() == "192.168.0.129"){
+				if($this->debug == 1){		
+					$_SESSION["DEBUG"] = 1;
+				}
+				elseif($this->debug <>"" && $this->debug == 0){
+					$_SESSION["DEBUG"] = 0;	
+				}
+				if($_SESSION["DEBUG"] == 1){
+					global $className;
+					$className         = $this->implementClassName;
+				}
+		  // }		
+	}
+	
+	 function sortImage($fieldName, $sortColumn) {
+		
+		 if (trim($fieldName)  == trim($sortColumn))
+
+			return $this->sortImage;			
+		 else 
+			return "";
+	 }	
+	
+	function getIp() {
+
+		$ipAddress = getenv("REMOTE_ADDR"); 
+
+		if($ipAddress == "") 
+			$ipAddress = $_SERVER['REMOTE_ADDR'];
+
+		return $ipAddress;
+	}
+	
+	
+}	
+?>
